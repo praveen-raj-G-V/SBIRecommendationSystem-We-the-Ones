@@ -17,7 +17,7 @@ def fetch_data():
     dfs = {}
     for name, query in query_dict.items():
         dfs[name] = pd.read_sql(query, conn)
-        print(f"✅ Retrieved {name} data.")
+        print(f" Retrieved {name} data.")
 
     conn.close()
     return dfs
@@ -25,4 +25,4 @@ def fetch_data():
 # Test data retrieval
 if __name__ == "__main__":
     data = fetch_data()
-    print(data["users"].head())  # Display sample data
+    print(data["users"].head()) 
