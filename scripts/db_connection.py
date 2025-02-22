@@ -8,10 +8,10 @@ def connect_db():
             password="Praj77258@",
             database="SBILifeAI"
         )
-        print("✅ MySQL Connection Successful!")
+        print(" MySQL Connection Successful!")
         return conn
     except mysql.connector.Error as err:
-        print(f"❌ Error: {err}")
+        print(f"Error: {err}")
         return None
 
 # Test Connection
