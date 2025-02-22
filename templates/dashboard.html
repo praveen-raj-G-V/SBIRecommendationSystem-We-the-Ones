@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | SBI Life</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <img src="{{ url_for('static', filename='images/sbi.logo.png') }}" alt="SBI Logo" class="logo">
+            <h1>State Bank of India</h1>
+        </div>
+        <div class="header-right">
+            <button class="logout-button" onclick="window.location.href='/'">Logout</button>
+        </div>
+    </header>
+
+    <!-- Greeting -->
+    <section class="greeting">
+        <h2>Welcome, {{ user_info["Name"] }}!</h2>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Toggle Buttons -->
+        <div class="toggle-container">
+            <button id="user-details-btn" class="toggle-button active">User Details</button>
+            <button id="policies-btn" class="toggle-button">Policies</button>
+        </div>
+
+        <!-- User Details Section -->
+        <div id="user-details">
+            <h3>Your Profile Information</h3>
+            <p><b>Customer ID:</b> {{ user_info["CustomerID"] }}</p>
+            <p><b>Email:</b> {{ user_info["Email"] }}</p>
+        </div>
+
+        <!-- Policies Section -->
+        <div id="policies" class="hidden">
+            <!-- Nested Toggles -->
+            <div class="nested-toggle-container">
+                <button id="current-policies-btn" class="nested-toggle-button active">Current Policies</button>
+                <button id="completed-policies-btn" class="nested-toggle-button">Completed Policies</button>
+            </div>
+
+            <!-- Current Policies -->
+            <div id="current-policies-section">
+                <h3>📝 Active Policies (Upcoming Renewal Dates)</h3>
+                {% if active_policies %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Policy Name</th>
+                                <th>Premium Amount</th>
+                                <th>Purchase Date</th>
+                                <th>Renewal Date</th>
+                                <th>Payment Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for policy in active_policies %}
+                            <tr>
+                                <td>{{ policy["PolicyName"].replace('â€“', '–') }}</td>
+                                <td>₹{{ policy["PremiumAmount"] }}/year</td>
+                                <td>{{ policy["PurchaseDate"] }}</td>
+                                <td>{{ policy["RenewalDate"].strftime('%Y-%m-%d') }}</td>
+                                <td>{{ policy["PaymentStatus"] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No active policies.</p>
+                {% endif %}
+            </div>
+
+            <!-- Completed Policies -->
+            <div id="completed-policies-section" class="hidden">
+                <h3>📜 Completed Policies</h3>
+                {% if completed_policies %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Policy Name</th>
+                                <th>Purchase Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for policy in completed_policies %}
+                            <tr>
+                                <td>{{ policy["PolicyName"].replace('â€“', '–') }}</td>
+                                <td>{{ policy["PurchaseDate"] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No completed policies.</p>
+                {% endif %}
+            </div>
+
+            <!-- Suggested Policies -->
+            <div class="suggested-policies">
+                <h3>Suggested Policies for You!</h3>
+                <div id="policyCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for policy in recommendations %}
+                            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                <div class="policy-box">
+                                    <div class="policy-summary">
+                                        <b>{{ policy["PolicyName"].replace('â€“', '–') }}</b>
+                                        <button class="details-button" onclick="toggleDetails(this)">More Details</button>
+                                    </div>
+                                    <div class="policy-details-area">
+                                        <img src="{{ url_for('static', filename='images/sbilife.png') }}" alt="SBI Logo" class="policy-logo">
+                                        <div class="policy-details hidden">
+                                            <p><b>Policy Name:</b> {{ policy["PolicyName"].replace('â€“', '–') }}</p>
+                                            <p><b>Policy ID:</b> {{ policy["PolicyID"] }}</p>
+                                            <p><b>Policy Type:</b> {{ policy["PolicyType"] }}</p>
+                                            <p><b>Premium Amount:</b> ₹{{ policy["PremiumAmount"] }}/year</p>
+                                            <p><b>Policy Duration:</b> {{ policy["PolicyDuration"] }} years</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#policyCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#policyCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 State Bank of India. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

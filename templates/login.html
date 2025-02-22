@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | SBI Life</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <img src="{{ url_for('static', filename='images/sbi.logo.png') }}" alt="Top Logo" class="top-logo">
+    <div class="login-container">
+        <!-- Circular Logo -->
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/sbii.png') }}" alt="Bank Logo" class="logo">
+        </div>
+
+        <!-- Bank Name -->
+        <h2>State Bank of India</h2>
+
+        <!-- Login Form -->
+        <form method="POST">
+            <!-- Customer ID Field -->
+            <div class="input-group">
+                <label for="customer_id"><b>Customer ID</b></label>
+                <input type="text" name="customer_id" placeholder="Enter Customer ID" required>
+            </div>
+
+            <!-- Password Field -->
+            <div class="input-group">
+                <label for="password"><b>Password</b></label>
+                <input type="password" name="password" placeholder="Enter Password" required>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit">Login</button>
+
+            <!-- Error Message -->
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
+        </form>
+
+        <!-- Links -->
+        <p class="links">
+            <p><a href="#">Forgot Password?</a></p>
+            <p><a href="#">New User | Registration</a></p>
+        </p>
+    </div>
+</body>
+</html>
